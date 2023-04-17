@@ -8,6 +8,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from constants import *
 from middlewares import *
+from qa import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -17,15 +18,25 @@ dp.middleware.setup(LoggingMiddleware())
 dp.middleware.setup(ThrottlingMiddleware())
 
 
-@dp.message_handler()
-@rate_limit(5, 'echo')
-async def echo(message: types.Message):
-    await message.answer(message.text)
+users = {}
 
 
 @dp.message_handler(commands=["start", "help"])
 async def send_welcome(message: types.Message):
-    await message.reply("Hi!\nI'm Quaert!\nI am ready to answer your questions!")
+    await message.reply("Hi!\nI'm Quaert!\nIntroduce yourself!")
+
+
+@dp.message_handler()
+@rate_limit(5, 'answer')
+async def answer(message: types.Message):
+    introduction = users.get(message.chat.id)
+    if not introduction:
+        users[message.chat.id] = message.text
+        answer = "Thanks for you personal story.\nI am ready to answer your questions!"
+    else:
+        question = message.text
+        answer = answer_question(question, introduction)
+    await message.answer(answer)
 
 
 async def on_startup(dispatcher):
