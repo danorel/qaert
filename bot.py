@@ -3,20 +3,22 @@ import logging
 from aiogram import Bot, executor, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from constants import *
+from middlewares import *
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, storage=MemoryStorage())
+dp.middleware.setup(LoggingMiddleware())
+dp.middleware.setup(ThrottlingMiddleware())
 
 
 @dp.message_handler()
+@rate_limit(5, 'echo')
 async def echo(message: types.Message):
     await message.answer(message.text)
 
