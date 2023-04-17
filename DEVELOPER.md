@@ -1,6 +1,6 @@
-# Foobar 
+# Foobar
 
-### Prerequisite 
+### Prerequisite
 
 - Python: 3.10
 - Jupyter Notebook: 6.4.12
@@ -10,7 +10,7 @@
 1. Install python virtual environment:
 
 ```shell
-python3 -m venv env 
+python3 -m venv env
 ```
 
 2. Activate python virtual env
@@ -41,6 +41,7 @@ python3 -m ipykernel install env
 ### Vim/NeoVim users:
 
 6. Install pynvim to enable coc:
+
 ```shell
 python3 -m pip install --upgrade pynvim
 ```
