@@ -1,6 +1,6 @@
-# Foobar
+# Qaert
 
-Foobar is a Python project for dealing with ...
+Qaert is a QA Telegram Bot based on BERT model.
 
 ## Installation & Contributing
 
@@ -9,7 +9,14 @@ Use the [DEVELOPER.md](./DEVELOPER.md) guide to run or contribute to the project
 ## Usage
 
 ```python
-... Awaiting for your CLI here
+python bot.py
+```
+
+or using Docker:
+
+```bash
+docker build --tag qaert .
+docker run -d qaert
 ```
 
 ## License
