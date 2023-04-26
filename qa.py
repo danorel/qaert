@@ -1,11 +1,28 @@
 import torch
 
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores import Milvus
+from langchain.document_loaders import TextLoader
+
 from transformers import BertForQuestionAnswering, BertTokenizer
+from constants import *
 
 model = BertForQuestionAnswering.from_pretrained(
     'bert-large-uncased-whole-word-masking-finetuned-squad')
 tokenizer = BertTokenizer.from_pretrained(
     'bert-large-uncased-whole-word-masking-finetuned-squad')
+
+embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+
+text_splitter = CharacterTextSplitter(
+    chunk_size=TRANSFORMER_INPUT_LENGTH, chunk_overlap=0)
+docs = text_splitter.split_documents(TextLoader('./books/1984.txt').load())
+vector_db = Milvus.from_documents(
+    docs,
+    embeddings,
+    connection_args={"host": "127.0.0.1", "port": "19530"},
+)
 
 
 def answer_question(question, answer_text):
@@ -70,3 +87,10 @@ def answer_question(question, answer_text):
             answer += ' ' + tokens[i]
 
     return answer
+
+
+def most_relevant_paragraph(query: str):
+    results = vector_db.similarity_search(query, k=1)
+    document, _ = results[0]
+    page_content = document[1]
+    return page_content[:TRANSFORMER_INPUT_LENGTH]

@@ -34,7 +34,8 @@ async def answer(message: types.Message):
         answer = "Thanks for you personal story.\nI am ready to answer your questions!"
     else:
         question = message.text
-        answer = answer_question(question, introduction)
+        relevant_paragraph = most_relevant_paragraph(question)
+        answer = answer_question(question, relevant_paragraph)
     await message.answer(answer)
 
 
