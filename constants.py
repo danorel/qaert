@@ -12,4 +12,5 @@ TOKEN = str(os.environ.get("TOKEN"))
 
 # ai settings
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+MILVUS_HOST = os.environ["MILVUS_HOST"]
 TRANSFORMER_INPUT_LENGTH = 512

@@ -21,7 +21,7 @@ docs = text_splitter.split_documents(TextLoader('./books/1984.txt').load())
 vector_db = Milvus.from_documents(
     docs,
     embeddings,
-    connection_args={"host": "127.0.0.1", "port": "19530"},
+    connection_args={"host": MILVUS_HOST, "port": "19530"},
 )
 
 
